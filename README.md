@@ -1,4 +1,4 @@
-# Lung Cancer CT Scan Classifier
+# Chest Vision 
 
 This project is a command-line application built with Python and PyTorch to classify lung CT scan images into one of seven categories, including normal and various types of cancerous conditions.
 

@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+*.pyc
+
+# Hugging Face Cache
+# This prevents uploading the downloaded dataset
+.cache/
+huggingface/
+
+# OS-specific files
+.DS_Store

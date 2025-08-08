@@ -1,11 +1,19 @@
+# Python
 venv/
 __pycache__/
 *.pyc
 
-# Hugging Face Cache
-# This prevents uploading the downloaded dataset
-.cache/
-huggingface/
+# Node.js
+node_modules/
+dist/
+build/
+.npm
+npm-debug.log*
 
-# OS-specific files
+# Environment variables
+.env
+
+# IDE / OS specific
+.vscode/
+.idea/
 .DS_Store

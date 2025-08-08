@@ -122,3 +122,8 @@ for epoch in range(num_epochs):
 
 print("\n Finished Training")
 
+
+# Save the Model
+model_path = "lung_cancer_classifier.pth"
+torch.save(model.state_dict(), model_path)
+print(f"\n Model saved to {model_path}")

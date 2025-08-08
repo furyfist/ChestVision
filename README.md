@@ -1,57 +1,125 @@
-# Chest Vision 
+# ChestVision: AI-Powered Lung Condition Classifier
 
-This project is a command-line application built with Python and PyTorch to classify lung CT scan images into one of seven categories, including normal and various types of cancerous conditions.
+ChestVision is a full-stack web application that uses a deep learning model to classify lung conditions from uploaded chest CT scan images. A user can interact with a simple web interface to get a real-time prediction from a trained PyTorch model.
 
-## Overview
+The project is built with a decoupled microservice architecture, separating the user interface, the backend logic, and the AI model into distinct, manageable services.
 
-The core of this project is a deep learning model that leverages transfer learning to achieve accurate classification on a specialized medical imaging dataset. The entire pipeline, from data loading to training and final prediction, is handled through a set of Python scripts.
+## Key Features
 
-## Features
+  - **Intuitive Interface**: A clean user interface for uploading CT scan images.
+  - **Real-Time Classification**: Get immediate predictions from the AI model.
+  - **Scalable Architecture**: The microservice design allows each part of the application (frontend, backend, AI) to be scaled and maintained independently.
 
-* **Multi-Class Classification**: Distinguishes between 7 different lung tissue classifications.
-* **Transfer Learning**: Utilizes a pre-trained ResNet-50 model, fine-tuned for this specific task.
-* **Data Handling**: Uses the `dorsar/lung-cancer` dataset from the Hugging Face Hub, with a custom `Dataset` class for image processing.
-* **End-to-End Scripts**: Includes separate scripts for training the model from scratch and for running predictions on new images using the saved model.
+## Tech Stack
 
-## Technology Stack
+  - **Frontend**: React, TypeScript, Axios
+  - **Backend (API Gateway)**: Node.js, Express, TypeScript, Multer
+  - **AI Service**: Python, Flask, PyTorch, Torchvision, Waitress
+  - **Model**: ResNet-50 (pre-trained, with a custom final layer)
+  - **Dataset**: `dorsar/lung-cancer` from Hugging Face Hub
 
-* Python 3
-* PyTorch
-* Torchvision
-* Hugging Face Datasets
-* Pillow (PIL)
+## Architecture Overview
 
-## Project Structure
+The application operates as three independent services that communicate via HTTP requests:
 
-* `src/dataset.py`: Defines the custom PyTorch `Dataset` for loading and transforming images.
-* `src/train.py`: Handles the complete model training and validation loop, saving the final weights.
-* `src/predict.py`: Loads the saved model weights and runs a prediction on a single image file.
-* `requirements.txt`: Lists all Python dependencies.
+```
+[ User Browser (React App @ Port 3000) ]
+        |
+        | (Image Upload)
+        v
+[ Node.js Backend (Express API @ Port 5000) ]
+        |
+        | (Forwards Image)
+        v
+[ Python AI Service (Flask/Waitress @ Port 8000) ]
+```
 
-## Setup and Usage
+1.  The **React Frontend** sends the user's uploaded image to the Node.js backend.
+2.  The **Node.js Backend** acts as a middleman, forwarding the image to the Python AI service.
+3.  The **Python AI Service** runs the image through the trained model, gets a prediction, and returns it.
+4.  The result travels back through the backend to the frontend to be displayed to the user.
 
-1.  **Clone the repository.**
-2.  **Create and activate a virtual environment:**
+## Getting Started
+
+Follow these instructions to get the project running on your local machine.
+
+### Prerequisites
+
+  - Node.js and npm
+  - Python and pip
+
+### Installation & Setup
+
+1.  **Clone the repository:**
+
     ```bash
+    git clone https://github.com/furyfist/ChestVision.git
+    cd ChestVision
+    ```
+
+2.  **Set up the Python AI Service:**
+
+    ```bash
+    # Create and activate a virtual environment
     python -m venv venv
-    source venv/bin/activate  # On macOS/Linux
-    .\venv\Scripts\activate    # On Windows
-    ```
-3.  **Install dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
-4.  **Train the Model:**
-    Run the training script. This will train the model and create the `lung_cancer_classifier.pth` file.
-    ```bash
-    python src/train.py
-    ```
-5.  **Run a Prediction:**
-    Update the `image_path` variable inside `src/predict.py` with the path to your image, then run the script.
-    ```bash
-    python src/predict.py
+    .\venv\Scripts\activate  # On Windows
+
+    # Install Python dependencies
+    pip install -r ai-service/requirements.txt
     ```
 
-## Current Status
+3.  **Set up the Node.js Backend:**
 
-The model achieves a validation accuracy of approximately 77% after 16 epochs of training on the provided dataset. The trained model weights are saved and can be used for inference.
+    ```bash
+    # Navigate to the backend directory
+    cd backend
+
+    # Install npm packages
+    npm install
+    ```
+
+4.  **Set up the React Frontend:**
+
+    ```bash
+    # Navigate to the frontend directory (from the root)
+    cd frontend
+
+    # Install npm packages
+    npm install
+    ```
+
+### Running the Application
+
+You must have **three separate terminals** open to run all the services concurrently.
+
+1.  **Terminal 1: Start the AI Service**
+
+    ```bash
+    # (In the root directory, with venv activated)
+    cd ai-service
+    waitress-serve --host=127.0.0.1 --port=8000 app:app
+    ```
+
+2.  **Terminal 2: Start the Backend**
+
+    ```bash
+    # (In a new terminal)
+    cd backend
+    npx ts-node-dev src/server.ts
+    ```
+
+3.  **Terminal 3: Start the Frontend**
+
+    ```bash
+    # (In a third terminal)
+    cd frontend
+    npm start
+    ```
+
+Once all servers are running, open your browser to `http://localhost:3000`.
+
+## Future Improvements
+
+  - **Deployment**: Deploy the services to a cloud platform (e.g., Vercel for frontend, Heroku/Render for backend, Google Cloud Run for AI).
+  - **Model Enhancement**: Improve model accuracy through data augmentation, hyperparameter tuning, or experimenting with different architectures.
+  - **Containerization**: Use Docker to containerize each service for more robust and portable deployment.

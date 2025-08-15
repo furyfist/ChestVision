@@ -51,10 +51,17 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>🫁 Lung CT Scan Classifier</h1>
-        <p>Upload a CT scan image to classify the lung condition.</p>
+        <h1>Chest Vision</h1>
+        <p>Upload a Chest CT scan image to classify the lung condition</p>
         <div className="card">
-          <input type="file" onChange={handleFileChange} accept="image/*" />
+          <input
+            id="fileInput"
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+           
+          />
+          <br/>
           {preview && (
             <div className="preview-container">
               <img src={preview} alt="Selected Preview" className="preview-image" />

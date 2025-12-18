@@ -209,7 +209,7 @@ function App() {
                 <h3>Data Preparation</h3>
               </div>
               <div className="stage-content">
-                <p><strong>Dataset:</strong> Hugging Face <code>lung-cancer</code> dataset</p>
+                <p><strong>Dataset:</strong> Hugging Face <a href="https://huggingface.co/datasets/dorsar/lung-cancer" target="_blank" rel="noopener noreferrer" className="inline-link"><code>lung-cancer</code></a> dataset</p>
                 <p><strong>Preprocessing:</strong> Resize to 224×224, normalize with ImageNet stats</p>
                 <p><strong>Output:</strong> PyTorch DataLoader ready for training</p>
               </div>
@@ -227,7 +227,7 @@ function App() {
                 <p><strong>Modified:</strong> Final FC layer → 4 classes</p>
                 <p><strong>Training:</strong> CrossEntropy loss, Adam optimizer, 10 epochs</p>
               </div>
-              <div className="stage-file">train.py → lung_cancer_classifier.pth</div>
+              <div className="stage-file">train.py → <a href="https://github.com/furyfist/ChestVision/blob/main/ai-service/models/lung_cancer_classifier.pth" target="_blank" rel="noopener noreferrer" className="inline-link">lung_cancer_classifier.pth</a></div>
             </div>
 
             {/* Stage 3: Prediction Service */}

@@ -316,6 +316,23 @@
   display: inline-block;
 }
 
+.stage-file a,
+.inline-link {
+  color: var(--primary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.stage-file a:hover,
+.inline-link:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.stage-content a code {
+  cursor: pointer;
+}
+
 .subsection-title {
   text-align: center;
   font-size: 1.125rem;

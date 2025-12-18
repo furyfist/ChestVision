@@ -454,8 +454,10 @@
 .prediction-value {
   display: block;
   font-weight: 700;
-  font-size: 1.125rem;
+  font-size: 1rem;
   color: var(--success);
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 /* ===== Footer ===== */

@@ -12,6 +12,17 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Map technical prediction names to user-friendly labels
+  const formatPrediction = (rawPrediction: string): string => {
+    const predictionMap: Record<string, string> = {
+      'normal': 'Normal (Healthy)',
+      'squamous.cell.carcinoma_left.hilum_T1_N2_M0_IIIa': 'Squamous Cell Carcinoma',
+      'large.cell.carcinoma_left.hilum_T2_N2_M0_IIIa': 'Large Cell Carcinoma',
+      'adenocarcinoma_left.lower.lobe_T2_N0_M0_Ib': 'Adenocarcinoma'
+    };
+    return predictionMap[rawPrediction] || rawPrediction;
+  };
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -282,7 +293,7 @@ function App() {
                     </svg>
                     <div>
                       <span className="result-label">Prediction</span>
-                      <span className="prediction-value">{prediction?.prediction}</span>
+                      <span className="prediction-value">{formatPrediction(prediction?.prediction || '')}</span>
                     </div>
                   </div>
                 )}

@@ -276,6 +276,71 @@
   font-weight: bold;
 }
 
+/* ===== Classifications Section ===== */
+.classifications {
+  background: var(--background);
+}
+
+.classifications-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.classification-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.classification-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+}
+
+.classification-card.normal {
+  border-color: var(--success);
+  background: var(--success-light);
+}
+
+.classification-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto var(--spacing-sm);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.classification-icon.success {
+  background: var(--success);
+  color: white;
+}
+
+.classification-icon.warning {
+  background: #f59e0b;
+  color: white;
+}
+
+.classification-card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: var(--spacing-xs);
+}
+
+.classification-card p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
 /* ===== Upload Section ===== */
 .upload-section {
   background: var(--background);

@@ -55,6 +55,36 @@ function App() {
     fileInputRef.current?.click();
   };
 
+  // Sample images for quick testing
+  const sampleImages = [
+    { src: '/samples/test1.png', label: 'Sample 1' },
+    { src: '/samples/test2.png', label: 'Sample 2' },
+    { src: '/samples/test3.png', label: 'Sample 3' },
+    { src: '/samples/test4.png', label: 'Sample 4' },
+    { src: '/samples/test5.png', label: 'Sample 5' },
+    { src: '/samples/test6.png', label: 'Sample 6' },
+    { src: '/samples/test7.png', label: 'Sample 7' },
+    { src: '/samples/test8.png', label: 'Sample 8' },
+    { src: '/samples/test9.png', label: 'Sample 9' },
+    { src: '/samples/test10.png', label: 'Sample 10' }
+  ];
+
+  const loadSampleImage = async (imageSrc: string) => {
+    try {
+      const response = await fetch(imageSrc);
+      const blob = await response.blob();
+      const file = new File([blob], imageSrc.split('/').pop() || 'sample.png', { type: blob.type });
+      processFile(file);
+    } catch (err) {
+      console.error('Failed to load sample image:', err);
+    }
+  };
+
+  const loadRandomSample = () => {
+    const randomIndex = Math.floor(Math.random() * sampleImages.length);
+    loadSampleImage(sampleImages[randomIndex].src);
+  };
+
   const handleUpload = async () => {
     if (!selectedFile) return;
 
@@ -223,7 +253,7 @@ function App() {
                 <h3>Model Training</h3>
               </div>
               <div className="stage-content">
-                <p><strong>Architecture:</strong> ResNet18 (transfer learning)</p>
+                <p><strong>Architecture:</strong> ResNet50 (transfer learning)</p>
                 <p><strong>Modified:</strong> Final FC layer → 4 classes</p>
                 <p><strong>Training:</strong> CrossEntropy loss, Adam optimizer, 10 epochs</p>
               </div>
@@ -237,7 +267,7 @@ function App() {
                 <h3>Prediction API</h3>
               </div>
               <div className="stage-content">
-                <p><strong>Load:</strong> ResNet18 + saved weights</p>
+                <p><strong>Load:</strong> ResNet50 + saved weights</p>
                 <p><strong>Process:</strong> PIL image → PyTorch transforms</p>
                 <p><strong>Inference:</strong> Forward pass in eval mode</p>
               </div>
@@ -328,7 +358,37 @@ function App() {
       <section id="upload" className="upload-section">
         <div className="section-container">
           <h2 className="section-title">Classify Your Scan</h2>
-          <p className="section-subtitle">Upload a chest CT scan image to get a classification prediction</p>
+          <p className="section-subtitle">Upload a chest CT scan image or try a sample below</p>
+
+          {/* Sample Images */}
+          <div className="sample-section">
+            <div className="sample-header">
+              <span className="sample-label">Try a sample scan:</span>
+              <button className="random-btn" onClick={loadRandomSample}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="16 3 21 3 21 8" />
+                  <line x1="4" y1="20" x2="21" y2="3" />
+                  <polyline points="21 16 21 21 16 21" />
+                  <line x1="15" y1="15" x2="21" y2="21" />
+                  <line x1="4" y1="4" x2="9" y2="9" />
+                </svg>
+                Random
+              </button>
+            </div>
+            <div className="sample-images">
+              {sampleImages.map((sample, index) => (
+                <button
+                  key={index}
+                  className="sample-btn"
+                  onClick={() => loadSampleImage(sample.src)}
+                  title={sample.label}
+                >
+                  <img src={sample.src} alt={sample.label} />
+                  <span className="sample-number">{index + 1}</span>
+                </button>
+              ))}
+            </div>
+          </div>
 
           <div className="upload-card animate-slide-up">
             <div

@@ -57,106 +57,247 @@ function App() {
       const response = await axios.post('http://localhost:5000/api/upload', formData);
       setPrediction(response.data);
     } catch (err: any) {
-      setError('Analysis failed. Please try again.');
+      setError('Analysis failed. Please check if all services are running.');
       console.error(err);
     } finally {
       setIsLoading(false);
     }
   };
 
+  const features = [
+    {
+      icon: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+      ),
+      title: 'Real-Time Analysis',
+      description: 'Get instant classification results within seconds of uploading your CT scan.'
+    },
+    {
+      icon: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+        </svg>
+      ),
+      title: 'Deep Learning',
+      description: 'Powered by ResNet-50, a state-of-the-art convolutional neural network trained on medical imaging data.'
+    },
+    {
+      icon: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+          <line x1="8" y1="21" x2="16" y2="21" />
+          <line x1="12" y1="17" x2="12" y2="21" />
+        </svg>
+      ),
+      title: 'Microservice Architecture',
+      description: 'Scalable design with separate frontend, backend, and AI services for reliability.'
+    }
+  ];
+
+  const techStack = [
+    { name: 'React', color: '#61DAFB' },
+    { name: 'TypeScript', color: '#3178C6' },
+    { name: 'Node.js', color: '#339933' },
+    { name: 'Express', color: '#000000' },
+    { name: 'Python', color: '#3776AB' },
+    { name: 'PyTorch', color: '#EE4C2C' },
+    { name: 'Flask', color: '#000000' }
+  ];
+
   return (
     <div className="App">
-      <div className="background-glow"></div>
-      
-      <header className="navbar">
-        <div className="logo">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-          </svg>
-          <span>ChestVision</span>
-        </div>
-      </header>
-
-      <main className="main-content">
-        <div className="hero-section">
-          <h1>AI-Powered Chest CT Analysis</h1>
-          <p>Advanced deep learning algorithms to detect and classify lung conditions with high accuracy.</p>
-        </div>
-
-        <div className="upload-card">
-          <div 
-            className={`drop-zone ${preview ? 'has-image' : ''}`}
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
-            onClick={triggerFileInput}
-          >
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              hidden
-            />
-            
-            {preview ? (
-              <div className="image-preview-wrapper">
-                 <img src={preview} alt="Scan Preview" className="preview-image" />
-                 <div className="change-overlay">
-                   <span>Click to Change</span>
-                 </div>
-              </div>
-            ) : (
-              <div className="upload-placeholder">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                  <polyline points="17 8 12 3 7 8" />
-                  <line x1="12" y1="3" x2="12" y2="15" />
-                </svg>
-                <span className="upload-text">Drag & drop your scan here</span>
-                <span className="upload-subtext">or click to browse</span>
-              </div>
-            )}
+      {/* Navigation */}
+      <nav className="navbar">
+        <div className="nav-content">
+          <div className="logo">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+            </svg>
+            <span>ChestVision</span>
           </div>
+          <a href="https://github.com/furyfist/ChestVision" target="_blank" rel="noopener noreferrer" className="github-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+            </svg>
+            GitHub
+          </a>
+        </div>
+      </nav>
 
-          <div className="actions">
-            <button 
-              className={`analyze-btn ${isLoading ? 'loading' : ''}`} 
-              onClick={handleUpload} 
+      {/* Hero Section */}
+      <section className="hero">
+        <div className="hero-content animate-fade-in">
+          <h1>AI-Powered Lung Condition Classifier</h1>
+          <p className="hero-subtitle">
+            ChestVision uses deep learning to analyze chest CT scans and classify lung conditions
+            in real-time. Built with a modern microservice architecture for scalability and reliability.
+          </p>
+          <a href="#upload" className="cta-button">
+            Try It Now
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </a>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="features">
+        <div className="section-container">
+          <h2 className="section-title">Key Features</h2>
+          <div className="features-grid">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="feature-card animate-slide-up"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className="feature-icon">{feature.icon}</div>
+                <h3>{feature.title}</h3>
+                <p>{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Tech Stack Section */}
+      <section className="tech-stack">
+        <div className="section-container">
+          <h2 className="section-title">Tech Stack</h2>
+          <div className="tech-badges">
+            {techStack.map((tech, index) => (
+              <span
+                key={index}
+                className="tech-badge animate-fade-in"
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
+                <span className="tech-dot" style={{ backgroundColor: tech.color }}></span>
+                {tech.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Architecture Section */}
+      <section className="architecture">
+        <div className="section-container">
+          <h2 className="section-title">Architecture</h2>
+          <div className="architecture-diagram animate-fade-in">
+            <div className="arch-box">
+              <span className="arch-label">Frontend</span>
+              <span className="arch-tech">React @ :3000</span>
+            </div>
+            <div className="arch-arrow">→</div>
+            <div className="arch-box">
+              <span className="arch-label">Backend</span>
+              <span className="arch-tech">Express @ :5000</span>
+            </div>
+            <div className="arch-arrow">→</div>
+            <div className="arch-box">
+              <span className="arch-label">AI Service</span>
+              <span className="arch-tech">Flask @ :8000</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Upload Section */}
+      <section id="upload" className="upload-section">
+        <div className="section-container">
+          <h2 className="section-title">Classify Your Scan</h2>
+          <p className="section-subtitle">Upload a chest CT scan image to get a classification prediction</p>
+
+          <div className="upload-card animate-slide-up">
+            <div
+              className={`drop-zone ${preview ? 'has-image' : ''} ${isLoading ? 'loading' : ''}`}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+              onClick={triggerFileInput}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                hidden
+              />
+
+              {preview ? (
+                <div className="image-preview-wrapper">
+                  <img src={preview} alt="Scan Preview" className="preview-image" />
+                  <div className="change-overlay">
+                    <span>Click to change</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="upload-placeholder">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                  </svg>
+                  <span className="upload-text">Drag & drop your scan here</span>
+                  <span className="upload-subtext">or click to browse</span>
+                </div>
+              )}
+            </div>
+
+            <button
+              className={`analyze-btn ${isLoading ? 'loading' : ''}`}
+              onClick={handleUpload}
               disabled={!selectedFile || isLoading}
             >
               {isLoading ? (
                 <>
-                  <span className="spinner"></span> Processing...
+                  <span className="spinner"></span>
+                  Analyzing...
                 </>
               ) : (
-                <>Analyze Scan</>
+                'Analyze Scan'
               )}
             </button>
-          </div>
 
-          {(error || prediction) && (
-            <div className={`result-panel ${error ? 'error' : 'success'}`}>
-              {error ? (
-                <div className="result-content error-content">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                  <span>{error}</span>
-                </div>
-              ) : (
-                <div className="result-content success-content">
-                  <span className="label">Diagnosis Prediction</span>
-                  <div className="prediction-value">{prediction?.prediction}</div>
-                  <div className="confidence-indicator">
-                    <div className="confidence-bar"></div>
+            {(error || prediction) && (
+              <div className={`result-panel ${error ? 'error' : 'success'}`}>
+                {error ? (
+                  <div className="result-content error-content">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="12" y1="8" x2="12" y2="12" />
+                      <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    <span>{error}</span>
                   </div>
-                </div>
-              )}
-            </div>
-          )}
+                ) : (
+                  <div className="result-content success-content">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                      <polyline points="22 4 12 14.01 9 11.01" />
+                    </svg>
+                    <div>
+                      <span className="result-label">Prediction</span>
+                      <span className="prediction-value">{prediction?.prediction}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
-      </main>
-      
+      </section>
+
+      {/* Footer */}
       <footer className="footer">
-        <p>&copy; 2025 ChestVision Medical AI. For research purpose only.</p>
+        <div className="footer-content">
+          <p>© 2025 ChestVision. For research and educational purposes only.</p>
+          <p className="disclaimer">This tool is not intended for medical diagnosis. Always consult a healthcare professional.</p>
+        </div>
       </footer>
     </div>
   );

@@ -2,36 +2,60 @@
 
 :root {
   /* Brand Colors */
-  --primary: #0ea5e9; /* Sky 500 */
-  --primary-dark: #0284c7; /* Sky 600 */
-  --primary-glow: rgba(14, 165, 233, 0.5);
-  
-  --background: #0f172a; /* Slate 900 */
-  --surface: #1e293b; /* Slate 800 */
-  --surface-glass: rgba(30, 41, 59, 0.7);
-  
-  --text-main: #f8fafc; /* Slate 50 */
-  --text-muted: #94a3b8; /* Slate 400 */
-  
+  --primary: #0ea5e9;
+  /* Sky 500 */
+  --primary-dark: #0284c7;
+  /* Sky 600 */
+  --primary-light: #e0f2fe;
+  /* Sky 100 */
+
+  /* Light Theme */
+  --background: #ffffff;
+  --background-secondary: #f8fafc;
+  /* Slate 50 */
+  --surface: #ffffff;
+  --border: #e2e8f0;
+  /* Slate 200 */
+
+  --text-main: #0f172a;
+  /* Slate 900 */
+  --text-secondary: #475569;
+  /* Slate 600 */
+  --text-muted: #94a3b8;
+  /* Slate 400 */
+
   --success: #10b981;
+  --success-light: #d1fae5;
   --error: #ef4444;
+  --error-light: #fee2e2;
 
   /* Spacing */
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
   --spacing-md: 2rem;
   --spacing-lg: 3rem;
+  --spacing-xl: 4rem;
 
   /* Border Radius */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {

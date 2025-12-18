@@ -1,127 +1,165 @@
 # ChestVision: AI-Powered Lung Condition Classifier
 
-ChestVision is a full-stack web application that uses a deep learning model to classify lung conditions from uploaded chest CT scan images. A user can interact with a simple web interface to get a real-time prediction from a trained PyTorch model.
+ChestVision is a full-stack web application that uses deep learning to classify lung conditions from chest CT scan images. Upload a scan through the clean web interface and get real-time predictions from a trained PyTorch model.
 
-The project is built with a decoupled microservice architecture, separating the user interface, the backend logic, and the AI model into distinct, manageable services.
+Built with a modern microservice architecture, separating the frontend, backend API, and AI model into distinct, scalable services.
 
-![alt text](Demo_image.png)
+![ChestVision Demo](Demo_image.png)
 
-## Key Features
+## ✨ Key Features
 
-  - **Intuitive Interface**: A clean user interface for uploading CT scan images.
-  - **Real-Time Classification**: Get immediate predictions from the AI model.
-  - **Scalable Architecture**: The microservice design allows each part of the application (frontend, backend, AI) to be scaled and maintained independently.
+- **Real-Time Classification** - Get instant predictions within seconds of uploading
+- **Sample Images Included** - 10 pre-loaded CT scans to test the model immediately
+- **Deep Learning Powered** - ResNet-50 trained on the Hugging Face lung-cancer dataset
+- **Modern UI** - Clean, professional light theme with smooth animations
+- **Microservice Architecture** - Each service can be scaled and deployed independently
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-  - **Frontend**: React, TypeScript, Axios
-  - **Backend (API Gateway)**: Node.js, Express, TypeScript, Multer
-  - **AI Service**: Python, Flask, PyTorch, Torchvision, Waitress
-  - **Model**: ResNet-50 (pre-trained, with a custom final layer)
-  - **Dataset**: `dorsar/lung-cancer` from Hugging Face Hub
+| Layer | Technologies |
+|-------|-------------|
+| **Frontend** | React, TypeScript, Axios |
+| **Backend** | Node.js, Express, TypeScript, Multer |
+| **AI Service** | Python, Flask, PyTorch, Torchvision, Waitress |
+| **Model** | ResNet-50 (transfer learning, 4-class output) |
+| **Dataset** | [dorsar/lung-cancer](https://huggingface.co/datasets/dorsar/lung-cancer) from Hugging Face |
 
-## Architecture Overview
-
-The application operates as three independent services that communicate via HTTP requests:
+## 🏗️ Architecture
 
 ```
-[ User Browser (React App @ Port 3000) ]
-        |
-        | (Image Upload)
-        v
-[ Node.js Backend (Express API @ Port 5000) ]
-        |
-        | (Forwards Image)
-        v
-[ Python AI Service (Flask/Waitress @ Port 8000) ]
+┌─────────────────────────────────────────────────────────┐
+│                    User Browser                         │
+│              (React App @ Port 3000)                    │
+└─────────────────────┬───────────────────────────────────┘
+                      │ Image Upload
+                      ▼
+┌─────────────────────────────────────────────────────────┐
+│               Node.js Backend                           │
+│          (Express API @ Port 5000)                      │
+└─────────────────────┬───────────────────────────────────┘
+                      │ Forwards Image
+                      ▼
+┌─────────────────────────────────────────────────────────┐
+│              Python AI Service                          │
+│         (Flask/Waitress @ Port 8000)                    │
+└─────────────────────┬───────────────────────────────────┘
+                      │
+                      ▼
+              🧠 Classification Result
 ```
 
-1.  The **React Frontend** sends the user's uploaded image to the Node.js backend.
-2.  The **Node.js Backend** acts as a middleman, forwarding the image to the Python AI service.
-3.  The **Python AI Service** runs the image through the trained model, gets a prediction, and returns it.
-4.  The result travels back through the backend to the frontend to be displayed to the user.
-
-## Getting Started
-
-Follow these instructions to get the project running on your local machine.
+## 🚀 Quick Start
 
 ### Prerequisites
 
-  - Node.js and npm
-  - Python and pip
+- **Node.js** (v18+) and npm
+- **Python** (3.10+) and pip
 
-### Installation & Setup
+### 1. Clone the Repository
 
-1.  **Clone the repository:**
+```bash
+git clone https://github.com/furyfist/ChestVision.git
+cd ChestVision
+```
 
-    ```bash
-    git clone https://github.com/furyfist/ChestVision.git
-    cd ChestVision
-    ```
+### 2. Set Up the AI Service (Python)
 
-2.  **Set up the Python AI Service:**
+```bash
+# Create and activate virtual environment
+python -m venv venv
 
-    ```bash
-    # Create and activate a virtual environment
-    python -m venv venv
-    .\venv\Scripts\activate  # On Windows
+# Windows
+.\venv\Scripts\activate
 
-    # Install Python dependencies
-    pip install -r ai-service/requirements.txt
-    ```
+# macOS/Linux
+source venv/bin/activate
 
-3.  **Set up the Node.js Backend:**
+# Install dependencies
+pip install -r ai-service/requirements.txt
+```
 
-    ```bash
-    # Navigate to the backend directory
-    cd backend
+### 3. Set Up the Backend (Node.js)
 
-    # Install npm packages
-    npm install
-    ```
+```bash
+cd backend
+npm install
+cd ..
+```
 
-4.  **Set up the React Frontend:**
+### 4. Set Up the Frontend (React)
 
-    ```bash
-    # Navigate to the frontend directory (from the root)
-    cd frontend
+```bash
+cd frontend
+npm install
+cd ..
+```
 
-    # Install npm packages
-    npm install
-    ```
+### 5. Run All Services
 
-### Running the Application
+Open **3 separate terminals** and run:
 
-You must have **three separate terminals** open to run all the services concurrently.
+**Terminal 1 - AI Service:**
+```bash
+cd ai-service
+waitress-serve --host=127.0.0.1 --port=8000 app:app
+```
 
-1.  **Terminal 1: Start the AI Service**
+**Terminal 2 - Backend:**
+```bash
+cd backend
+npx ts-node-dev src/server.ts
+```
 
-    ```bash
-    # (In the root directory, with venv activated)
-    cd ai-service
-    waitress-serve --host=127.0.0.1 --port=8000 app:app
-    ```
+**Terminal 3 - Frontend:**
+```bash
+cd frontend
+npm start
+```
 
-2.  **Terminal 2: Start the Backend**
+### 6. Open the App
 
-    ```bash
-    # (In a new terminal)
-    cd backend
-    npx ts-node-dev src/server.ts
-    ```
+Visit **http://localhost:3000** in your browser.
 
-3.  **Terminal 3: Start the Frontend**
+Try the sample images or upload your own CT scan!
 
-    ```bash
-    # (In a third terminal)
-    cd frontend
-    npm start
-    ```
+## 📁 Project Structure
 
-Once all servers are running, open your browser to `http://localhost:3000`.
+```
+ChestVision/
+├── frontend/               # React TypeScript app
+│   ├── src/
+│   │   ├── components/     # Modular UI components
+│   │   ├── App.tsx         # Main app component
+│   │   └── App.css         # Styles
+│   └── public/
+│       └── samples/        # 10 sample CT images
+├── backend/                # Express API gateway
+│   └── src/
+│       └── server.ts       # API routes
+├── ai-service/             # Flask + PyTorch
+│   ├── app.py              # Flask API
+│   ├── predict.py          # Model inference
+│   ├── train.py            # Training script
+│   ├── dataset.py          # Data loading
+│   └── models/             # Saved model weights
+└── README.md
+```
 
-## Future Improvements
+## 🔮 Classification Categories
 
-  - **Deployment**: Deploy the services to a cloud platform (e.g., Vercel for frontend, Heroku/Render for backend, Google Cloud Run for AI).
-  - **Model Enhancement**: Improve model accuracy through data augmentation, hyperparameter tuning, or experimenting with different architectures.
-  - **Containerization**: Use Docker to containerize each service for more robust and portable deployment.
+The model classifies scans into 4 categories:
+
+| Category | Description |
+|----------|-------------|
+| **Normal** | Healthy lung tissue |
+| **Adenocarcinoma** | Most common type, mucus-producing cells |
+| **Squamous Cell Carcinoma** | Flat cells lining airways |
+| **Large Cell Carcinoma** | Fast-growing, any lung area |
+
+## ⚠️ Disclaimer
+
+This tool is for **research and educational purposes only**. It is not intended for medical diagnosis. Always consult a healthcare professional for medical advice.
+
+## 📄 License
+
+MIT License - Feel free to use and modify for your projects.

@@ -60,11 +60,6 @@ const HowItWorks: React.FC = () => {
                     </div>
                     <div className="arch-arrow">→</div>
                     <div className="arch-box">
-                        <span className="arch-label">Express Gateway</span>
-                        <span className="arch-tech">:5000</span>
-                    </div>
-                    <div className="arch-arrow">→</div>
-                    <div className="arch-box">
                         <span className="arch-label">Flask AI Service</span>
                         <span className="arch-tech">:8000</span>
                     </div>

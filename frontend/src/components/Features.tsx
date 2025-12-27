@@ -28,8 +28,8 @@ const features = [
                 <line x1="12" y1="17" x2="12" y2="21" />
             </svg>
         ),
-        title: 'Microservice Architecture',
-        description: 'Scalable design with separate frontend, backend, and AI services for reliability.'
+        title: 'Lean Architecture',
+        description: 'Streamlined design with React frontend communicating directly with Flask AI service.'
     }
 ];
 

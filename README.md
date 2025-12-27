@@ -2,7 +2,7 @@
 
 ChestVision is a full-stack web application that uses deep learning to classify lung conditions from chest CT scan images. Upload a scan through the clean web interface and get real-time predictions from a trained PyTorch model.
 
-Built with a modern microservice architecture, separating the frontend, backend API, and AI model into distinct, scalable services.
+Built with a lean architecture, connecting the React frontend directly to the Flask AI service.
 
 ![ChestVision Demo](Demo_image.png)
 
@@ -12,15 +12,14 @@ Built with a modern microservice architecture, separating the frontend, backend 
 - **Sample Images Included** - 10 pre-loaded CT scans to test the model immediately
 - **Deep Learning Powered** - ResNet-50 trained on the Hugging Face lung-cancer dataset
 - **Modern UI** - Clean, professional light theme with smooth animations
-- **Microservice Architecture** - Each service can be scaled and deployed independently
+- **Lean Architecture** - Streamlined design with frontend connecting directly to AI service
 
 ## 🛠️ Tech Stack
 
 | Layer | Technologies |
 |-------|-------------|
 | **Frontend** | React, TypeScript, Axios |
-| **Backend** | Node.js, Express, TypeScript, Multer |
-| **AI Service** | Python, Flask, PyTorch, Torchvision, Waitress |
+| **AI Service** | Python, Flask, PyTorch, Torchvision |
 | **Model** | ResNet-50 (transfer learning, 4-class output) |
 | **Dataset** | [dorsar/lung-cancer](https://huggingface.co/datasets/dorsar/lung-cancer) from Hugging Face |
 
@@ -34,14 +33,8 @@ Built with a modern microservice architecture, separating the frontend, backend 
                       │ Image Upload
                       ▼
 ┌─────────────────────────────────────────────────────────┐
-│               Node.js Backend                           │
-│          (Express API @ Port 5000)                      │
-└─────────────────────┬───────────────────────────────────┘
-                      │ Forwards Image
-                      ▼
-┌─────────────────────────────────────────────────────────┐
 │              Python AI Service                          │
-│         (Flask/Waitress @ Port 8000)                    │
+│            (Flask @ Port 8000)                          │
 └─────────────────────┬───────────────────────────────────┘
                       │
                       ▼
@@ -52,7 +45,7 @@ Built with a modern microservice architecture, separating the frontend, backend 
 
 ### Prerequisites
 
-- **Node.js** (v18+) and npm
+- **Node.js** (v18+) and npm (for frontend)
 - **Python** (3.10+) and pip
 
 ### 1. Clone the Repository
@@ -78,45 +71,32 @@ source venv/bin/activate
 pip install -r ai-service/requirements.txt
 ```
 
-### 3. Set Up the Backend (Node.js)
-
-```bash
-cd backend
-npm install
-cd ..
-```
-
-### 4. Set Up the Frontend (React)
+### 3. Set Up the Frontend (React)
 
 ```bash
 cd frontend
 npm install
 cd ..
+
 ```
 
-### 5. Run All Services
+### 4. Run All Services
 
-Open **3 separate terminals** and run:
+Open **2 separate terminals** and run:
 
 **Terminal 1 - AI Service:**
 ```bash
 cd ai-service
-waitress-serve --host=127.0.0.1 --port=8000 app:app
+python app.py
 ```
 
-**Terminal 2 - Backend:**
-```bash
-cd backend
-npx ts-node-dev src/server.ts
-```
-
-**Terminal 3 - Frontend:**
+**Terminal 2 - Frontend:**
 ```bash
 cd frontend
 npm start
 ```
 
-### 6. Open the App
+### 5. Open the App
 
 Visit **http://localhost:3000** in your browser.
 
@@ -133,9 +113,7 @@ ChestVision/
 │   │   └── App.css         # Styles
 │   └── public/
 │       └── samples/        # 10 sample CT images
-├── backend/                # Express API gateway
-│   └── src/
-│       └── server.ts       # API routes
+
 ├── ai-service/             # Flask + PyTorch
 │   ├── app.py              # Flask API
 │   ├── predict.py          # Model inference

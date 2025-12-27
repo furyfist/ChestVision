@@ -79,11 +79,18 @@ def predict():
         # Make a prediction
         with torch.no_grad():
             outputs = model(tensor)
-            _, predicted_idx = torch.max(outputs, 1)
+            # Apply softmax to get probabilities
+            probabilities = torch.nn.functional.softmax(outputs, dim=1)
+            confidence, predicted_idx = torch.max(probabilities, 1)
+            confidence_score = confidence.item() * 100  # Convert to percentage
             predicted_class = CLASS_NAMES[predicted_idx.item()]
 
-        print(f"Prediction successful: {predicted_class}")
-        return jsonify({'prediction': predicted_class})
+        print(f"Prediction: {predicted_class} (confidence: {confidence_score:.1f}%)")
+        return jsonify({
+            'prediction': predicted_class,
+            'confidence': round(confidence_score, 1),
+            'invalid_image': False
+        })
 
     except Exception as e:
         print(f"Error during prediction: {e}")

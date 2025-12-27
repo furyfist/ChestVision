@@ -15,7 +15,12 @@ import {
 function App() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-  const [prediction, setPrediction] = useState<{ prediction: string } | null>(null);
+  const [prediction, setPrediction] = useState<{
+    prediction: string | null;
+    confidence?: number;
+    invalid_image?: boolean;
+    message?: string;
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,7 +53,14 @@ function App() {
 
     try {
       const response = await axios.post('http://localhost:8000/predict', formData);
-      setPrediction(response.data);
+
+      // Check if the image was rejected due to low confidence
+      if (response.data.invalid_image) {
+        setError(response.data.message || 'Unable to classify - please upload a valid chest CT scan');
+        setPrediction(null);
+      } else {
+        setPrediction(response.data);
+      }
     } catch (err: any) {
       setError('Analysis failed. Please check if all services are running.');
       console.error(err);

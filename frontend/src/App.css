@@ -768,6 +768,18 @@
   font-size: 0.75rem !important;
 }
 
+.upload-disclaimer {
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm);
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  border-radius: var(--radius-sm);
+  color: #92400e;
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
   .hero h1 {

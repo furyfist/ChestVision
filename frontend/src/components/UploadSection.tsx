@@ -5,7 +5,12 @@ interface UploadSectionProps {
     preview: string | null;
     isLoading: boolean;
     error: string | null;
-    prediction: { prediction: string } | null;
+    prediction: {
+        prediction: string | null;
+        confidence?: number;
+        invalid_image?: boolean;
+        message?: string;
+    } | null;
     onFileChange: (file: File) => void;
     onUpload: () => void;
     formatPrediction: (rawPrediction: string) => string;
@@ -189,6 +194,11 @@ const UploadSection: React.FC<UploadSectionProps> = ({
                         </div>
                     )}
                 </div>
+
+                {/* Disclaimer */}
+                <p className="upload-disclaimer">
+                    ⚠️ Results are only valid for chest CT scan images. Uploading other images may produce incorrect predictions.
+                </p>
             </div>
         </section>
     );

@@ -2,12 +2,12 @@ import torch
 import torch.nn as nn
 from torchvision import models, transforms
 from torchvision.models import ResNet50_Weights
-from PIL import Image
+from PIL import Image, ImageStat 
 
 # model setup
 print("Setting up for predictions......")
 
-device = torch.device("cude" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu") 
 
 # all classes
 class_names = [
@@ -21,36 +21,61 @@ class_names = [
 ]
 
 # creating same model architecture as in training
-model = models.resnet50() # No weights argument here
+model = models.resnet50() 
 num_features = model.fc.in_features
 model.fc = nn.Linear(num_features, len(class_names))
 
 # Loading the Saved Model Weights 
 model_path = "lung_cancer_classifier.pth"
+# Use map_location to ensure it loads even if you don't have a GPU right now
 model.load_state_dict(torch.load(model_path, map_location=device))
 model.to(device)
-model.eval() # Set model to evaluation mode
+model.eval()
 print(f"Model loaded from {model_path} and set to evaluation mode.")
 
 # Image Transformation Pipeline
-# This must be IDENTICAL to the transformations used for validation/training
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
-# --- 4. Load and Predict a Single Image ---
+# --- NEW HELPER FUNCTION ---
+def is_likely_ct_scan(img_pil):
+    """
+    Checks if an image is grayscale (CT scan) or colorful (Random object).
+    Returns True if it looks like a CT scan.
+    """
+    # Convert to HSV (Hue, Saturation, Value)
+    hsv_img = img_pil.convert('HSV')
+    
+    # Get the average saturation of the image (0 = gray, 255 = very colorful)
+    mean_saturation = ImageStat.Stat(hsv_img).mean[1]
+    
+    # If average saturation is greater than 25, it definitely has color
+    if mean_saturation > 25:
+        return False
+    return True
+
+# Load and Predict a Single Image 
 def predict_image(image_path):
     try:
         # Open the image file
-        img = Image.open(image_path).convert('RGB')
+        img = Image.open(image_path)
+        
+        # NEW: CHECK BEFORE PREDICTING 
+        if not is_likely_ct_scan(img):
+            print(f"\nPrediction for '{image_path}':")
+            print(f"--> Result: Invalid Image (Not a CT Scan) ❌")
+            return # Stop here, don't run the model
+        
+        # If it passes the check, convert to RGB for the model
+        img = img.convert('RGB')
         
         # Apply the transformations
         img_t = transform(img)
         
-        # The model expects a batch of images, so we add a batch dimension
-        # (e.g., from [3, 224, 224] to [1, 3, 224, 224])
+        # Add batch dimension
         batch_t = torch.unsqueeze(img_t, 0)
         batch_t = batch_t.to(device)
         
@@ -71,8 +96,3 @@ def predict_image(image_path):
         print(f"Error: The file '{image_path}' was not found.")
     except Exception as e:
         print(f"An error occurred: {e}")
-
-# --- 5. Run Prediction ---
-# IMPORTANT: Replace this with the actual path to an image you want to test
-test_image_path = "C:/Users/himan/OneDrive/Desktop/Lung Cancer/test_images_from_google/test2.png"
-predict_image(test_image_path)

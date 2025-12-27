@@ -9,20 +9,20 @@ from torchvision.models import ResNet50_Weights
 
 
 print("Loading raw dataset from Hugging Face...")
-# 1. Load raw dataset from Hugging Face
+# Load raw dataset from Hugging Face
 raw_ds = load_dataset("dorsar/lung-cancer")
 
 print("Creating custom PyTorch datasets...")
-# 2. Create instances of our custom dataset for train and validation sets
+# Create instances of our custom dataset for train and validation sets
 train_dataset = LungCancerDataset(hg_dataset_split=raw_ds['train'])
 val_dataset = LungCancerDataset(hg_dataset_split=raw_ds['validation'])
 
 print("Creating DataLoaders...")
-# 3. Wrap the datasets in DataLoaders
+# Wrap the datasets in DataLoaders
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 
-# 4. Check if it works
+# Check if it works
 print(f"Successfully created a train loader with {len(train_loader)} batches of size 32.")
 print(f"Successfully created a validation loader with {len(val_loader)} batches of size 32.")
 
@@ -41,7 +41,7 @@ for param in model.parameters():
 num_features = model.fc.in_features # Get the number of input features for the final layer
 model.fc = nn.Linear(num_features, 7) # Replace it with a new layer for our 7 classes
 
-# 4. Move the model to the correct device (GPU if available, otherwise CPU)
+# Move the model to the correct device (GPU if available, otherwise CPU)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
 

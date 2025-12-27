@@ -2,6 +2,7 @@
 
 import os
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from PIL import Image
 import torch
 import io 
@@ -57,6 +58,7 @@ def transform_image(image_bytes):
 # --- 3. Flask App Definition ---
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for frontend access
 
 @app.route('/predict', methods=['POST'])
 def predict():

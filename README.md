@@ -4,7 +4,7 @@ ChestVision is a full-stack web application that uses deep learning to classify 
 
 Built with a modern microservice architecture, separating the frontend, backend API, and AI model into distinct, scalable services.
 
-![ChestVision Demo](Demo_image.png?v=2)
+![ChestVision Demo](Demo_image.png)
 
 ## ✨ Key Features
 

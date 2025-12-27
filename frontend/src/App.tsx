@@ -47,7 +47,7 @@ function App() {
     formData.append('file', selectedFile);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/upload', formData);
+      const response = await axios.post('http://localhost:8000/predict', formData);
       setPrediction(response.data);
     } catch (err: any) {
       setError('Analysis failed. Please check if all services are running.');

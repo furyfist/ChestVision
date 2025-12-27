@@ -749,6 +749,14 @@
   overflow-wrap: break-word;
 }
 
+.confidence-score {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 4px;
+}
+
 /* ===== Footer ===== */
 .footer {
   margin-top: auto;

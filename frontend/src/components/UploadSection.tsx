@@ -188,6 +188,9 @@ const UploadSection: React.FC<UploadSectionProps> = ({
                                     <div>
                                         <span className="result-label">Prediction</span>
                                         <span className="prediction-value">{formatPrediction(prediction?.prediction || '')}</span>
+                                        {prediction?.confidence && (
+                                            <span className="confidence-score">Confidence: {prediction.confidence}%</span>
+                                        )}
                                     </div>
                                 </div>
                             )}
